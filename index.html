@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pending Fees Report</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f2f2f2; padding: 20px; }
+    h2 { text-align: center; }
+    table { border-collapse: collapse; width: 90%; margin: 20px auto; background: #fff; }
+    th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
+    th { background: #2196F3; color: white; }
+    tr:nth-child(even) { background: #f9f9f9; }
+    .paid { color: green; font-weight: bold; }
+    .pending { color: red; font-weight: bold; }
+    .na { color: gray; font-style: italic; }
+  </style>
+</head>
+<body>
+
+<h2>📑 Pending Fees Report</h2>
+
+<table id="reportTable">
+  <tr>
+    <th>Student Name</th>
+    <th>School Fee</th>
+    <th>Hostel Fee</th>
+    <th>Bus Fee</th>
+  </tr>
+</table>
+
+<script>
+  function generateReport() {
+    let students = JSON.parse(localStorage.getItem("students")) || [];
+    let table = document.getElementById("reportTable");
+
+    students.forEach(student => {
+      let row = table.insertRow();
+
+      row.insertCell().innerHTML = student.name;
+
+      let fees = ["School Fee", "Hostel Fee", "Bus Fee"];
+      fees.forEach(fee => {
+        let cell = row.insertCell();
+
+        if (student.feesPaid && student.feesPaid.includes(fee)) {
+          cell.innerHTML = "<span class='paid'>Paid</span>";
+        } else if (fee === "Hostel Fee" && student.hostel === "No") {
+          cell.innerHTML = "<span class='na'>N/A</span>";
+        } else if (fee === "Bus Fee" && student.bus === "No") {
+          cell.innerHTML = "<span class='na'>N/A</span>";
+        } else {
+          cell.innerHTML = "<span class='pending'>Pending</span>";
+        }
+      });
+    });
+  }
+
+  generateReport();
+</script>
+
+</body>
+</html>
